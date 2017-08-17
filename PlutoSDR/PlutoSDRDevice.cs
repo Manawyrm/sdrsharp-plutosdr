@@ -33,7 +33,7 @@ namespace SDRSharp.PlutoSDR
         private GCHandle _gcHandle;
         private UnsafeBuffer _iqBuffer;
         private unsafe Complex* _iqPtr;
-        private bool _isStreaming;
+        public bool _isStreaming;
         private readonly SamplesAvailableEventArgs _eventArgs = new SamplesAvailableEventArgs();
         private static uint _readLength = 4 * 1024;
         private Thread _sampleThread = null;

@@ -2,6 +2,13 @@
 
 Analog Devices ADALM-PlutoSDR driver for SDR#
 
+## Known issues
+- IP address is hardcoded in the plugin
+- changing sample rate while running will crash/start undefined behaviour
+- bandwidth/filtering is probably set wrong
+- HF frontend supports AGC, need flag to activate that
+- many more...
+
 ## Installation
 
 ### Windows
@@ -21,6 +28,8 @@ Analog Devices ADALM-PlutoSDR driver for SDR#
 
 Jean-Michel Picod for the bladeRF driver, which was used as a base for this driver
 https://github.com/jmichelp/sdrsharp-bladerf
+
+dos_fan] and prog for very helpful support while debugging
 
 
 ## Bugs? Ideas?
