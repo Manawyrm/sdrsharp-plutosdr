@@ -7,3 +7,4 @@ Release/*.xml
 Release/SDRSharp.PlutoSDR.dll.*
 *.suo
 *.user
+.vs/*
