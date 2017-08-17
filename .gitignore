@@ -1,0 +1,9 @@
+PlutoSDR/obj/*
+PlutoSDR/bin/*
+Debug/*
+Release/SDRSharp.Common.dll
+Release/SDRSharp.Radio.dll
+Release/*.xml
+Release/SDRSharp.PlutoSDR.dll.*
+*.suo
+*.user
