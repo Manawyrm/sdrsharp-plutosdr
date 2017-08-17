@@ -36,8 +36,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.samplerateComboBox = new System.Windows.Forms.ComboBox();
             this.PlutoSDRTypeLabel = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.samplingModeComboBox = new System.Windows.Forms.ComboBox();
             this.rxVga1GainTrackBar = new System.Windows.Forms.TrackBar();
             this.rxVga1gainLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -58,7 +56,7 @@
             // closeButton
             // 
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.closeButton.Location = new System.Drawing.Point(184, 251);
+            this.closeButton.Location = new System.Drawing.Point(184, 198);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 8;
@@ -88,7 +86,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 107);
+            this.label3.Location = new System.Drawing.Point(12, 54);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 13);
             this.label3.TabIndex = 24;
@@ -98,7 +96,7 @@
             // 
             this.samplerateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.samplerateComboBox.FormattingEnabled = true;
-            this.samplerateComboBox.Location = new System.Drawing.Point(12, 124);
+            this.samplerateComboBox.Location = new System.Drawing.Point(12, 71);
             this.samplerateComboBox.Name = "samplerateComboBox";
             this.samplerateComboBox.Size = new System.Drawing.Size(103, 21);
             this.samplerateComboBox.TabIndex = 1;
@@ -112,28 +110,6 @@
             this.PlutoSDRTypeLabel.TabIndex = 29;
             this.PlutoSDRTypeLabel.Text = "PlutoSDR";
             this.PlutoSDRTypeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 57);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 13);
-            this.label5.TabIndex = 31;
-            this.label5.Text = "Sampling Mode";
-            // 
-            // samplingModeComboBox
-            // 
-            this.samplingModeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.samplingModeComboBox.FormattingEnabled = true;
-            this.samplingModeComboBox.Items.AddRange(new object[] {
-            "Unknown",
-            "RX/TX SMA",
-            "J60/J61 connectors"});
-            this.samplingModeComboBox.Location = new System.Drawing.Point(12, 74);
-            this.samplingModeComboBox.Name = "samplingModeComboBox";
-            this.samplingModeComboBox.Size = new System.Drawing.Size(247, 21);
-            this.samplingModeComboBox.TabIndex = 2;
             // 
             // rxVga1GainTrackBar
             // 
@@ -182,7 +158,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(131, 107);
+            this.label9.Location = new System.Drawing.Point(131, 54);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(57, 13);
             this.label9.TabIndex = 46;
@@ -192,7 +168,7 @@
             // 
             this.bandwidthComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bandwidthComboBox.FormattingEnabled = true;
-            this.bandwidthComboBox.Location = new System.Drawing.Point(134, 124);
+            this.bandwidthComboBox.Location = new System.Drawing.Point(134, 71);
             this.bandwidthComboBox.Name = "bandwidthComboBox";
             this.bandwidthComboBox.Size = new System.Drawing.Size(125, 21);
             this.bandwidthComboBox.TabIndex = 45;
@@ -203,7 +179,7 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.rxVga1gainLabel);
             this.groupBox2.Controls.Add(this.rxVga1GainTrackBar);
-            this.groupBox2.Location = new System.Drawing.Point(12, 156);
+            this.groupBox2.Location = new System.Drawing.Point(12, 103);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(247, 89);
             this.groupBox2.TabIndex = 47;
@@ -215,13 +191,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.closeButton;
-            this.ClientSize = new System.Drawing.Size(272, 281);
+            this.ClientSize = new System.Drawing.Size(272, 236);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.bandwidthComboBox);
             this.Controls.Add(this.labelVersion);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.samplingModeComboBox);
             this.Controls.Add(this.PlutoSDRTypeLabel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.samplerateComboBox);
@@ -257,8 +231,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox samplerateComboBox;
         private System.Windows.Forms.Label PlutoSDRTypeLabel;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox samplingModeComboBox;
         private System.Windows.Forms.TrackBar rxVga1GainTrackBar;
         private System.Windows.Forms.Label rxVga1gainLabel;
         private System.Windows.Forms.Label label6;

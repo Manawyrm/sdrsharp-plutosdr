@@ -255,7 +255,6 @@ namespace SDRSharp.PlutoSDR
 
         public unsafe static DeviceDisplay[] GetActiveDevices()
         {
-            IntPtr _tmp;
             DeviceDisplay[] result = new DeviceDisplay[1];
 
             try
