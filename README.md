@@ -13,7 +13,7 @@ Analog Devices ADALM-PlutoSDR driver for SDR#
 
 ### Windows
 
-1. Copy the Release\SDRSharp.PlutoSDR.dll into SDR# installation directory
+1. Copy the [Release\SDRSharp.PlutoSDR.dll](https://tbspace.de/content/downloads/sdrsharp-plutosdr/SDRSharp.PlutoSDR.dll) and [libiio-sharp.dll](https://tbspace.de/content/downloads/sdrsharp-plutosdr/libiio-sharp.dll) into SDR# installation directory
 2. Install the [32bit build of libiio](https://wiki.analog.com/resources/tools-software/linux-software/libiio#libiio_installer_for_windows) on your system, or move the .dlls into the SDR# directory
 3. Add the following line in the frontendPlugins sections of FrontEnds.xml file:
 
