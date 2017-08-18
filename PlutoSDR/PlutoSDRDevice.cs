@@ -26,7 +26,7 @@ namespace SDRSharp.PlutoSDR
         private Channel _rx0_i;
         private Channel _rx0_q;
         private long _centerFrequency = DefaultFrequency;
-        private double _sampleRate = DefaultSamplerate;
+        private long _sampleRate = DefaultSamplerate;
         private int _bandwidth;
         private bool _RXConfigured = false;
         private int _manualGain = Utils.GetIntSetting("PlutoSDRManualGain", 20);
@@ -76,10 +76,10 @@ namespace SDRSharp.PlutoSDR
             }
             set
             {
-                _sampleRate = value;
+                _sampleRate = (long) value;
                if (_dev != null)
                 {
-                    IIOHelper.SetAttribute(_dev, "voltage0", "sampling_frequency", (long) value);
+                    //IIOHelper.SetAttribute(_dev, "voltage0", "sampling_frequency", (long) value);
                     //if (_bandwidth == 0)
                     //    NativeMethods.PlutoSDR_set_bandwidth(_dev, PlutoSDR_module.PlutoSDR_MODULE_RX, (uint)(_sampleRate * 0.75), out tmp);
                 }
@@ -247,8 +247,8 @@ namespace SDRSharp.PlutoSDR
                 throw new ApplicationException("Cannot open device");
 
 
-            IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", 103000000L);
-            IIOHelper.SetAttribute(_dev, "voltage0", "sampling_frequency", (long)_sampleRate);
+            IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", 340000000L);
+            IIOHelper.SetAttribute(_dev, "voltage0", "sampling_frequency", _sampleRate);
 
             IIOHelper.SetAttribute(_dev, "voltage0", "gain_control_mode", "manual");
             IIOHelper.SetAttribute(_dev, "voltage1", "gain_control_mode", "manual");

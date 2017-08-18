@@ -25,7 +25,7 @@ namespace SDRSharp.PlutoSDR
                 deviceComboBox.Items.AddRange(devices);
 
             //samplerateComboBox.SelectedIndex = Utils.GetIntSetting("PlutoSDRSampleRate", 1);
-            samplerateComboBox.SelectedIndex = 2;
+            samplerateComboBox.SelectedIndex = 0;
             // FIXME!!!
 
 
@@ -56,6 +56,7 @@ namespace SDRSharp.PlutoSDR
                 samplerateComboBox.Items.Add(String.Format("0.{0} MSPS", i));
             samplerateComboBox.Items.Add("0.200 MSPS");
             samplerateComboBox.Items.Add("0.160 MSPS");*/
+            samplerateComboBox.Items.Add("2.1 MSPS");
             samplerateComboBox.Items.Add("2.5 MSPS");
             samplerateComboBox.Items.Add("2 MSPS");
             samplerateComboBox.Items.Add("1 MSPS");
@@ -267,9 +268,10 @@ namespace SDRSharp.PlutoSDR
                     result[0] = new DeviceDisplay { Index = 0, Name = name };
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                MessageBox.Show(e.ToString(), "Error while loading PlutoSDR frontend", MessageBoxButtons.OK);
+                //throw new ApplicationException(e.ToString());
             }
 
             return result;

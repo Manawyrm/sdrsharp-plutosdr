@@ -19,7 +19,7 @@ namespace SDRSharp.PlutoSDR
 
         public PlutoSDRIO()
         {
-            _frequency = 102000000L;
+            _frequency = 340000000L;
             _gui = new PlutoSDRControllerDialog(this);
           
         }
