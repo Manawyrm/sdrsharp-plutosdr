@@ -7,6 +7,7 @@ Analog Devices ADALM-PlutoSDR driver for SDR#
 ### Windows
 
 **Make sure you're using the x86 / 32-bit version of SDR#! It'll not work with the 64bit version.**
+
 **Make sure you're using the [latest firmware](https://wiki.analog.com/university/tools/pluto/users/firmware) for the PlutoSDR!**
 
 1. Install the [USB drivers for the PlutoSDR](https://github.com/analogdevicesinc/plutosdr-m2k-drivers-win/releases). 
