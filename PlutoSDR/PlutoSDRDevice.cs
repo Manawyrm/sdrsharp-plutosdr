@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using iio;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace SDRSharp.PlutoSDR
 {
@@ -16,8 +17,7 @@ namespace SDRSharp.PlutoSDR
         private const int MinBandwidth = 1500000;
         private const int MaxBandwidth = 28000000;
         private const uint SampleTimeoutMs = 1000;
-        private const uint NumBuffers = 32;
-        
+
         private static object syncLock = new object();
         private string DeviceName = "PlutoSDR";
         private Device _dev;
@@ -27,7 +27,8 @@ namespace SDRSharp.PlutoSDR
         private Channel _rx0_q;
         private long _centerFrequency = DefaultFrequency;
         private long _sampleRate = DefaultSamplerate;
-        private int _bandwidth;
+        private long _bandwidth;
+        private string _gainControlMode = Utils.GetStringSetting("PlutoSDRGainControlMode", "manual");
         private bool _RXConfigured = false;
         private int _manualGain = Utils.GetIntSetting("PlutoSDRManualGain", 20);
         private GCHandle _gcHandle;
@@ -35,9 +36,11 @@ namespace SDRSharp.PlutoSDR
         private unsafe Complex* _iqPtr;
         public bool _isStreaming;
         private readonly SamplesAvailableEventArgs _eventArgs = new SamplesAvailableEventArgs();
-        private static uint _readLength = 4 * 1024;
+        private static uint _readLength = 512 * 1024;
         private Thread _sampleThread = null;
-        
+        private PlutoSDRIO _plutoSDRIO;
+        private PlutoSDRControllerDialog _gui;
+
         public uint Index
         {
             get
@@ -76,14 +79,33 @@ namespace SDRSharp.PlutoSDR
             }
             set
             {
-                _sampleRate = (long) value;
-               if (_dev != null)
+                _sampleRate = (long)value;
+                if (_dev != null)
                 {
-                    //IIOHelper.SetAttribute(_dev, "voltage0", "sampling_frequency", (long) value);
-                    //if (_bandwidth == 0)
-                    //    NativeMethods.PlutoSDR_set_bandwidth(_dev, PlutoSDR_module.PlutoSDR_MODULE_RX, (uint)(_sampleRate * 0.75), out tmp);
+                    try
+                    {
+                        IntPtr dev = (IntPtr) NativeMethods.GetInstanceField(typeof(Device), _dev, "dev");
+
+                        //FIXME: return value of set_bb_rate should be checked!
+                        int retVal = NativeMethods.ad9361_set_bb_rate(dev, (uint)value);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Couldn't set sample rate of " + value.ToString() + "!\n" + ex.Message, "Unsupported sample rate", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    Bandwidth = (int) (value * 1.25);
+                    configureReadLength();
                 }
                 OnSampleRateChanged();
+            }
+        }
+
+        public void configureReadLength()
+        {
+            if (!IsStreaming)
+            {
+                _readLength = (uint)(((long)_sampleRate / 20));
+                _gui.bufferReadSizeLabel.Text = _readLength.ToString() + " Bytes";
             }
         }
 
@@ -99,28 +121,45 @@ namespace SDRSharp.PlutoSDR
         {
             get
             {
-                if (_bandwidth != 0)
-                    return _bandwidth;
-               if (_dev != null)
-                {
-                    //if (0 == NativeMethods.PlutoSDR_get_bandwidth(_dev, PlutoSDR_module.PlutoSDR_MODULE_RX, out tmp))
-                    //    return (int) tmp;
-                }
-                return Math.Min(MaxBandwidth, Math.Max((int)(0.75 * _sampleRate), MinBandwidth));
+                return (int)_bandwidth;
             }
 
             set
             {
                 _bandwidth = value;
-               if (_dev != null)
+                _gui.bandwidthLabel.Text = _bandwidth.ToString() + " Hz";
+                if (_dev != null)
                 {
-                    //if (value == 0)
-                    //    NativeMethods.PlutoSDR_set_bandwidth(_dev, PlutoSDR_module.PlutoSDR_MODULE_RX, (uint) (0.75 * _sampleRate), out tmp);
-                    //else
-                    //    NativeMethods.PlutoSDR_set_bandwidth(_dev, PlutoSDR_module.PlutoSDR_MODULE_RX, (uint) value, out tmp);
+                    IIOHelper.SetAttribute(_dev, "voltage0", "rf_bandwidth", value);
                 }
             }
         }
+
+        public string RSSI
+        {
+            get
+            {
+                return IIOHelper.GetAttributeString(_dev, "voltage0", "rssi");
+            }
+        }
+
+        public string GainControlMode
+        {
+            get
+            {
+                return _gainControlMode;
+            }
+            set
+            {
+                if (value == "manual" || value == "slow_attack")
+                {
+                    _gainControlMode = value;
+                }
+                IIOHelper.SetAttribute(_dev, "voltage0", "gain_control_mode", value);
+                IIOHelper.SetAttribute(_dev, "voltage1", "gain_control_mode", value);
+            }
+        }
+
 
         public long Frequency
         {
@@ -130,10 +169,18 @@ namespace SDRSharp.PlutoSDR
             }
             set
             {
-               if (_dev != null)
+                _centerFrequency = value;
+                if (_dev != null)
                 {
-                    IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", value);
-                }
+                    try
+                    {
+                        IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", _centerFrequency);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Couldn't set frequency to " + value.ToString() + "!\n" + ex.Message, "Unsupported LO frequency", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+				}
             }
         }
 
@@ -145,12 +192,10 @@ namespace SDRSharp.PlutoSDR
             }
         }
 
-
-        public PlutoSDRDevice(string serial = "")
+        public PlutoSDRDevice(PlutoSDRIO plutoSDRIO)
         {
-            string devspec = "";
-            if (serial != "")
-                devspec = String.Format("*:serial={0}", serial);
+            _plutoSDRIO = plutoSDRIO;
+            _gui = _plutoSDRIO.GUI;
         }
 
         ~PlutoSDRDevice()
@@ -170,10 +215,19 @@ namespace SDRSharp.PlutoSDR
         }
 
         public event SamplesAvailableDelegate SamplesAvailable;
+        const float scale = 1.0f / 32768.0f;
+        byte[] samplesI;
+        byte[] samplesQ;
 
         private unsafe void ReceiveSamples_sync()
         {
             int status = 0;
+
+            float[] lut = new float[0x10000];
+            for (UInt16 i = 0x0000; i < 0xFFFF; i++)
+            {
+                lut[i] = ((((i & 0xFFFF) + 32768) % 65536) - 32768) * scale; 
+            }
             while (_isStreaming)
             {
                 uint cur_len, new_len;
@@ -197,23 +251,25 @@ namespace SDRSharp.PlutoSDR
                     {
                         _buf.refill();
 
-                        byte[] samplesI = _rx0_i.read(_buf);
-                        byte[] samplesQ = _rx0_q.read(_buf);
+                        samplesI = _rx0_i.read(_buf);
+                        samplesQ = _rx0_q.read(_buf);
 
-                        const float scale = 1.0f / 2048.0f;
-                                                
                         var ptrIq = _iqPtr;
                         for (int i = 0; i < _readLength; i++)
                         {
-                            int sampleOffset = i * 2;
-                            var sampleI = (samplesI[sampleOffset + 1] << 8) + samplesI[sampleOffset];
-                            var sampleQ = (samplesQ[sampleOffset + 1] << 8) + samplesQ[sampleOffset];
+                            int sampleOffset = (i * 2);
 
-                            ptrIq->Real = (((( sampleI ) + 2048) % 4096) - 2048) * scale;
-                            ptrIq->Imag = (((( sampleQ ) + 2048) % 4096) - 2048) * scale;
+                            UInt16 sampleI = (UInt16)((samplesI[sampleOffset + 1] << 8) + samplesI[sampleOffset]);
+                            UInt16 sampleQ = (UInt16)((samplesQ[sampleOffset + 1] << 8) + samplesQ[sampleOffset]);
+
+                            ptrIq->Real = lut[sampleI];
+                            ptrIq->Imag = lut[sampleQ];
                             ptrIq++;
                         }
-                        ComplexSamplesAvailable(_iqPtr, _iqBuffer.Length);
+                        if (_isStreaming)
+                        {
+                            ComplexSamplesAvailable(_iqPtr, _iqBuffer.Length);
+                        }
                     }
                     catch
                     {
@@ -229,30 +285,66 @@ namespace SDRSharp.PlutoSDR
                         status = 1;
                     }
                 }
-              
+
             }
         }
 
+        public bool createContext()
+        {
+            _gui.deviceUriTextbox.Enabled = false;
+            _gui.connectButton.Enabled = false;
+
+            try
+            {
+                _ctx = new iio.Context(_gui.deviceUriTextbox.Text);
+
+                _gui.libiioVersionLabel.Text = _ctx.backend_version.git_tag;
+                _dev = _ctx.get_device("ad9361-phy");
+
+                if (_dev == null)
+                    throw new ApplicationException("Cannot open device ad9361-phy");
+
+                Utils.SaveSetting("PlutoSDRURI", _gui.deviceUriTextbox.Text);
+
+                _gui.receiverPanel.Enabled = true;
+
+                _gui.contextDetailsLabel.Text = _ctx.description;
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _gui.deviceUriTextbox.Enabled = true;
+                _gui.connectButton.Enabled = true;
+                throw ex;
+            }
+
+        }
+
+        public void configureReceiver()
+        {
+            this.Frequency = _centerFrequency;
+            this.SampleRate = _sampleRate;
+
+            this.GainControlMode = _gainControlMode;
+            this.ManualGain = _manualGain;
+        }
         public unsafe void Start()
         {
             if (_isStreaming)
                 throw new ApplicationException("Start() Already running");
+
+            PlutoSDRControllerDialog gui = _plutoSDRIO.GUI;
+            _gui.samplerateComboBox.Enabled = false;
+
             if (_dev == null)
             {
-                //MessageBox.Show("Connecting!");
-                _ctx = new iio.Context("ip:192.168.2.1");
-                _dev = _ctx.get_device("ad9361-phy");
+                createContext();
             }
-            if (_dev == null)
-                throw new ApplicationException("Cannot open device");
 
+            configureReceiver();
 
-            IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", 340000000L);
-            IIOHelper.SetAttribute(_dev, "voltage0", "sampling_frequency", _sampleRate);
-
-            IIOHelper.SetAttribute(_dev, "voltage0", "gain_control_mode", "manual");
-            IIOHelper.SetAttribute(_dev, "voltage1", "gain_control_mode", "manual");
-            
             Device lpc = _ctx.get_device("cf-ad9361-lpc");
 
             if (lpc == null)
@@ -266,6 +358,10 @@ namespace SDRSharp.PlutoSDR
             _rx0_i.enable();
             _rx0_q.enable();
 
+            if (_buf != null)
+            {
+                _buf.Dispose();
+            }
             _buf = new IOBuffer(lpc, _readLength, false);
             if (_buf == null)
                 throw new ApplicationException("Could not initialize I/Q sample buffer");
@@ -284,7 +380,7 @@ namespace SDRSharp.PlutoSDR
                     ready = _RXConfigured;
                 }
             }
-            
+
         }
 
         public void Stop()
@@ -293,18 +389,17 @@ namespace SDRSharp.PlutoSDR
             {
                 _isStreaming = false;
             }
-            
+
             if (_sampleThread != null)
             {
                 if (_sampleThread.ThreadState == ThreadState.Running)
                     _sampleThread.Join();
+
                 _sampleThread = null;
             }
 
-           if (_dev != null)
-            {
-                _dev = null;
-            }
+            PlutoSDRControllerDialog gui = _plutoSDRIO.GUI;
+            _gui.samplerateComboBox.Enabled = true;
         }
 
         private unsafe void ComplexSamplesAvailable(Complex* buffer, int length)

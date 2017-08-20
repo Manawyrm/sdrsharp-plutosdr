@@ -7,7 +7,7 @@ using SDRSharp.Radio;
 
 namespace SDRSharp.PlutoSDR
 {
-       public class PlutoSDRIO : IFrontendController, IIQStreamController, IDisposable, ISampleRateChangeSource , IFloatingConfigDialogProvider, ITunableSource, IControlAwareObject, ISpectrumProvider
+    public class PlutoSDRIO : IFrontendController, IIQStreamController, IDisposable, ISampleRateChangeSource, IFloatingConfigDialogProvider, ITunableSource, IControlAwareObject, ISpectrumProvider
     {
         private const string _displayName = "PlutoSDR";
         private readonly PlutoSDRControllerDialog _gui;
@@ -19,9 +19,7 @@ namespace SDRSharp.PlutoSDR
 
         public PlutoSDRIO()
         {
-            _frequency = 340000000L;
             _gui = new PlutoSDRControllerDialog(this);
-          
         }
 
         ~PlutoSDRIO()
@@ -40,17 +38,6 @@ namespace SDRSharp.PlutoSDR
             GC.SuppressFinalize(this);
         }
 
-        public void SelectDevice(string serial)
-        {
-            Close();
-            _PlutoSDRDevice = new PlutoSDRDevice(serial);
-            _PlutoSDRDevice.SamplesAvailable += PlutoSDRDevice_SamplesAvailable;
-            _PlutoSDRDevice.SampleRateChanged += PlutoSDRDevice_SampleRateChanged;
-            _PlutoSDRDevice.Frequency = _frequency;
-            _gui.ConfigureGUI();
-            _gui.ConfigureDevice();
-        }
-
         public PlutoSDRDevice Device
         {
             get
@@ -59,26 +46,22 @@ namespace SDRSharp.PlutoSDR
             }
         }
 
+        public PlutoSDRControllerDialog GUI
+        {
+            get
+            {
+                return _gui;
+            }
+        }
+
         public void Open()
         {
-            DeviceDisplay[] activeDevices = DeviceDisplay.GetActiveDevices();
-            if (null == activeDevices)
-                throw new ApplicationException("No compatible devices found");
-            foreach (DeviceDisplay deviceDisplay in activeDevices)
-            {
-                try
-                {
-                    SelectDevice(deviceDisplay.Serial);
-                    return;
-                }
-                catch
-                {
-                }
-            }
-            if (activeDevices.Length > 0)
-                throw new ApplicationException(activeDevices.Length + " compatible devices have been found but are all busy");
-            else
-                throw new ApplicationException("No compatible devices found");
+            Close();
+            _PlutoSDRDevice = new PlutoSDRDevice(this);
+            _PlutoSDRDevice.SamplesAvailable += PlutoSDRDevice_SamplesAvailable;
+            _PlutoSDRDevice.SampleRateChanged += PlutoSDRDevice_SampleRateChanged;
+            _gui.ConfigureGUI();
+            _gui.ConfigureDevice();
         }
 
         public void Close()
@@ -115,18 +98,18 @@ namespace SDRSharp.PlutoSDR
 
         public bool IsSoundCardBased
         {
-          get
-          {
-            return false;
-          }
+            get
+            {
+                return false;
+            }
         }
 
         public string SoundCardHint
         {
-          get
-          {
-            return string.Empty;
-          }
+            get
+            {
+                return string.Empty;
+            }
         }
 
         public void ShowSettingGUI(IWin32Window parent)
@@ -146,46 +129,46 @@ namespace SDRSharp.PlutoSDR
 
         public double Samplerate
         {
-          get
-          {
-            if (_PlutoSDRDevice != null)
-              return _PlutoSDRDevice.SampleRate;
-            else
-              return 0.0;
-          }
+            get
+            {
+                if (_PlutoSDRDevice != null)
+                    return _PlutoSDRDevice.SampleRate;
+                else
+                    return 0.0;
+            }
         }
 
         public long Frequency
         {
-          get
-          {
-            return _frequency;
-          }
-          set
-          {
-            if (this._PlutoSDRDevice == null)
-              return;
-            this._PlutoSDRDevice.Frequency = (long)(value * (1.0 + this._frequencyCorrection * 1E-06));
-            this._frequency = value;
-          }
+            get
+            {
+                return _frequency;
+            }
+            set
+            {
+                if (this._PlutoSDRDevice == null)
+                    return;
+                this._PlutoSDRDevice.Frequency = (long)(value * (1.0 + this._frequencyCorrection * 1E-06));
+                this._frequency = value;
+            }
         }
 
         public double FrequencyCorrection
         {
-          get
-          {
-            return this._frequencyCorrection;
-          }
-          set
-          {
-            this._frequencyCorrection = value;
-            this.Frequency = this._frequency;
-          }
+            get
+            {
+                return this._frequencyCorrection;
+            }
+            set
+            {
+                this._frequencyCorrection = value;
+                this.Frequency = this._frequency;
+            }
         }
 
         private unsafe void PlutoSDRDevice_SamplesAvailable(object sender, SamplesAvailableEventArgs e)
         {
-          _callback(this, e.Buffer, e.Length);
+            _callback(this, e.Buffer, e.Length);
         }
 
         public float UsableSpectrumRatio
@@ -209,7 +192,7 @@ namespace SDRSharp.PlutoSDR
         {
             get
             {
-                return 50000000L;
+                return 70000000L;
             }
         }
         long ITunableSource.MaximumTunableFrequency
@@ -222,7 +205,7 @@ namespace SDRSharp.PlutoSDR
 
         public void SetControl(object control)
         {
-            this._gui.Control = (ISharpControl) control;
+            this._gui.Control = (ISharpControl)control;
         }
     }
 }

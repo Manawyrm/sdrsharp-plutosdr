@@ -88,7 +88,26 @@ namespace SDRSharp.PlutoSDR
             }
             return -1;
         }
+        public static string GetAttributeString(Device phy, string Channel, string Attribute)
+        {
+            foreach (Channel chn in phy.channels)
+            {
+                if (chn.attrs.Count == 0)
+                    continue;
 
+                if (chn.id.Equals(Channel))
+                {
+                    foreach (Attr attr in chn.attrs)
+                    {
+                        if (attr.name.CompareTo(Attribute) == 0)
+                        {
+                            return attr.read();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
         public static Channel FindChannel(Device phy, string Channel)
         {
             foreach (Channel chn in phy.channels)
