@@ -8,3 +8,6 @@ Release/SDRSharp.PlutoSDR.dll.*
 *.suo
 *.user
 .vs/*
+Release/libiio-sharp.dll
+Release/SDRSharp.PanView.dll
+Release/SDRSharp.PlutoSDR.dll

@@ -177,8 +177,11 @@ namespace SDRSharp.PlutoSDR
                 rxVga1gainLabel.Enabled = false;
                 label6.Enabled = false;
 
-                _owner.Device.GainControlMode = "slow_attack";
-                Utils.SaveSetting("PlutoSDRGainControlMode", _owner.Device.GainControlMode);
+                if (_owner.Device != null)
+                {
+                    _owner.Device.GainControlMode = "slow_attack";
+                    Utils.SaveSetting("PlutoSDRGainControlMode", _owner.Device.GainControlMode);
+                }
             }
             else
             {
@@ -186,8 +189,11 @@ namespace SDRSharp.PlutoSDR
                 rxVga1gainLabel.Enabled = true;
                 label6.Enabled = true;
 
-                _owner.Device.GainControlMode = "manual";
-                Utils.SaveSetting("PlutoSDRGainControlMode", _owner.Device.GainControlMode);
+                if (_owner.Device != null)
+                {
+                    _owner.Device.GainControlMode = "manual";
+                    Utils.SaveSetting("PlutoSDRGainControlMode", _owner.Device.GainControlMode);
+                }
             }
         }
 

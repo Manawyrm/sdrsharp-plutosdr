@@ -213,10 +213,10 @@
             this.versionLinkLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.versionLinkLabel.Location = new System.Drawing.Point(13, 286);
             this.versionLinkLabel.Name = "versionLinkLabel";
-            this.versionLinkLabel.Size = new System.Drawing.Size(125, 17);
+            this.versionLinkLabel.Size = new System.Drawing.Size(135, 17);
             this.versionLinkLabel.TabIndex = 49;
             this.versionLinkLabel.TabStop = true;
-            this.versionLinkLabel.Text = "Version 0.4 - GitHub";
+            this.versionLinkLabel.Text = "Version 0.4.1 - GitHub";
             this.versionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.versionLinkLabel_LinkClicked);
             // 
             // connectButton
