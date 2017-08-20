@@ -5,6 +5,7 @@ Analog Devices ADALM-PlutoSDR driver for SDR#
 ## Installation
 
 ### Windows
+-- Make sure you're using the x86 / 32-bit version of SDR#! It'll not work with the 64bit version.
 
 1. Copy the the contents of the [current release .zip](https://github.com/Manawyrm/sdrsharp-plutosdr/releases) into SDR# installation directory
 2. Add the following line in the frontendPlugins sections of FrontEnds.xml file:
