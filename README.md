@@ -19,6 +19,8 @@ Analog Devices ADALM-PlutoSDR driver for SDR#
 
 **Be aware that any update of SDR# will require you to follow again steps 2 to 4!**
 
+[Mod for 70-6000 MHz operation](https://wiki.analog.com/university/tools/pluto/users/customizing#updating_to_the_ad9364) currently required for this plugin! 
+
 ## Thanks to 
 
 Jean-Michel Picod for the bladeRF driver, which was used as a base for this driver
