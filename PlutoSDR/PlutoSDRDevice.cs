@@ -296,6 +296,7 @@ namespace SDRSharp.PlutoSDR
 
             try
             {
+                //MessageBox.Show(_gui.deviceUriTextbox.Text);
                 _ctx = new iio.Context(_gui.deviceUriTextbox.Text);
 
                 _gui.libiioVersionLabel.Text = _ctx.backend_version.git_tag;
