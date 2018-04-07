@@ -329,7 +329,10 @@ namespace SDRSharp.PlutoSDR
             this.SampleRate = _sampleRate;
 
             this.GainControlMode = _gainControlMode;
-            this.ManualGain = _manualGain;
+            if (this.GainControlMode == "manual")
+            {
+                this.ManualGain = _manualGain;
+            }
         }
         public unsafe void Start()
         {
