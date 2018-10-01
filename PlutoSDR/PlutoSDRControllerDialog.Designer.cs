@@ -227,7 +227,7 @@
             this.versionLinkLabel.Size = new System.Drawing.Size(82, 17);
             this.versionLinkLabel.TabIndex = 49;
             this.versionLinkLabel.TabStop = true;
-            this.versionLinkLabel.Text = "Version 0.4.2";
+            this.versionLinkLabel.Text = "Version 0.4.4";
             this.versionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.versionLinkLabel_LinkClicked);
             // 
             // connectButton
