@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SDR#")]
-[assembly: AssemblyCopyright("Copyright © Tobias Mädel 2017")]
+[assembly: AssemblyCopyright("Copyright © Tobias Mädel 2017-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

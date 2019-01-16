@@ -28,7 +28,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\..\Programme\SDR\sdrsharp\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -81,15 +81,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="libiio-sharp">
-      <HintPath>..\..\..\..\Desktop\libiio-win32\libiio-win32\libiio-sharp.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\SDR\sdrsharp\libiio-sharp.dll</HintPath>
     </Reference>
     <Reference Include="SDRSharp.Common, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\SDR\sdrsharp-x86\SDRSharp.Common.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\SDR\sdrsharp\SDRSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SDRSharp.Radio, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\SDR\sdrsharp-x86\SDRSharp.Radio.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\SDR\sdrsharp\SDRSharp.Radio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />

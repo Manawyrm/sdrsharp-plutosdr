@@ -67,7 +67,7 @@ namespace SDRSharp.PlutoSDR
             {
                 _manualGain = value;
                 if (_dev != null)
-                    IIOHelper.SetAttribute(_dev, "voltage0", "hardwaregain", value);
+                    IIOHelper.SetAttribute(_dev, "voltage0", "hardwaregain", value.ToString(), true);
             }
         }
 
@@ -130,7 +130,7 @@ namespace SDRSharp.PlutoSDR
                 _gui.bandwidthLabel.Text = _bandwidth.ToString() + " Hz";
                 if (_dev != null)
                 {
-                    IIOHelper.SetAttribute(_dev, "voltage0", "rf_bandwidth", value);
+                    IIOHelper.SetAttribute(_dev, "voltage0", "rf_bandwidth", value.ToString(), true);
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace SDRSharp.PlutoSDR
         {
             get
             {
-                return IIOHelper.GetAttributeString(_dev, "voltage0", "rssi");
+                return IIOHelper.GetAttributeString(_dev, "voltage0", "rssi", true);
             }
         }
 
@@ -155,8 +155,8 @@ namespace SDRSharp.PlutoSDR
                 {
                     _gainControlMode = value;
                 }
-                IIOHelper.SetAttribute(_dev, "voltage0", "gain_control_mode", value);
-                IIOHelper.SetAttribute(_dev, "voltage1", "gain_control_mode", value);
+                IIOHelper.SetAttribute(_dev, "voltage0", "gain_control_mode", value, true);
+                IIOHelper.SetAttribute(_dev, "voltage1", "gain_control_mode", value, true);
             }
         }
 
@@ -174,7 +174,7 @@ namespace SDRSharp.PlutoSDR
                 {
                     try
                     {
-                        IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", _centerFrequency);
+                        IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", _centerFrequency.ToString(), false);
                     }
                     catch (Exception ex)
                     {
@@ -250,7 +250,7 @@ namespace SDRSharp.PlutoSDR
                     try
                     {
                         _buf.refill();
-
+ 
                         samplesI = _rx0_i.read(_buf);
                         samplesQ = _rx0_q.read(_buf);
 
