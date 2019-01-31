@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TabPage receiverTabPage;
             this.receiverPanel = new System.Windows.Forms.Panel();
+            this.customFilterCheckbox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.agcEnabledCheckBox = new System.Windows.Forms.CheckBox();
@@ -67,6 +68,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.twitterLink = new System.Windows.Forms.LinkLabel();
             receiverTabPage = new System.Windows.Forms.TabPage();
             receiverTabPage.SuspendLayout();
             this.receiverPanel.SuspendLayout();
@@ -84,13 +86,14 @@
             receiverTabPage.Location = new System.Drawing.Point(4, 26);
             receiverTabPage.Name = "receiverTabPage";
             receiverTabPage.Padding = new System.Windows.Forms.Padding(3);
-            receiverTabPage.Size = new System.Drawing.Size(291, 233);
+            receiverTabPage.Size = new System.Drawing.Size(291, 238);
             receiverTabPage.TabIndex = 1;
             receiverTabPage.Text = "Receiver";
             receiverTabPage.UseVisualStyleBackColor = true;
             // 
             // receiverPanel
             // 
+            this.receiverPanel.Controls.Add(this.customFilterCheckbox);
             this.receiverPanel.Controls.Add(this.label3);
             this.receiverPanel.Controls.Add(this.groupBox2);
             this.receiverPanel.Controls.Add(this.samplerateComboBox);
@@ -98,8 +101,21 @@
             this.receiverPanel.Enabled = false;
             this.receiverPanel.Location = new System.Drawing.Point(3, 3);
             this.receiverPanel.Name = "receiverPanel";
-            this.receiverPanel.Size = new System.Drawing.Size(285, 227);
+            this.receiverPanel.Size = new System.Drawing.Size(285, 232);
             this.receiverPanel.TabIndex = 48;
+            // 
+            // customFilterCheckbox
+            // 
+            this.customFilterCheckbox.AutoSize = true;
+            this.customFilterCheckbox.Checked = true;
+            this.customFilterCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.customFilterCheckbox.Location = new System.Drawing.Point(15, 203);
+            this.customFilterCheckbox.Name = "customFilterCheckbox";
+            this.customFilterCheckbox.Size = new System.Drawing.Size(171, 21);
+            this.customFilterCheckbox.TabIndex = 36;
+            this.customFilterCheckbox.Text = "Enable software FIR filter";
+            this.customFilterCheckbox.UseVisualStyleBackColor = true;
+            this.customFilterCheckbox.CheckedChanged += new System.EventHandler(this.customFilterCheckbox_CheckedChanged);
             // 
             // label3
             // 
@@ -118,7 +134,7 @@
             this.groupBox2.Controls.Add(this.rxVga1GainTrackBar);
             this.groupBox2.Location = new System.Drawing.Point(15, 67);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(244, 136);
+            this.groupBox2.Size = new System.Drawing.Size(244, 130);
             this.groupBox2.TabIndex = 47;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Gain controls";
@@ -185,7 +201,7 @@
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.closeButton.Location = new System.Drawing.Point(234, 281);
+            this.closeButton.Location = new System.Drawing.Point(234, 286);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(77, 26);
             this.closeButton.TabIndex = 8;
@@ -222,12 +238,12 @@
             this.versionLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.versionLinkLabel.AutoSize = true;
             this.versionLinkLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.versionLinkLabel.Location = new System.Drawing.Point(13, 286);
+            this.versionLinkLabel.Location = new System.Drawing.Point(13, 291);
             this.versionLinkLabel.Name = "versionLinkLabel";
             this.versionLinkLabel.Size = new System.Drawing.Size(82, 17);
             this.versionLinkLabel.TabIndex = 49;
             this.versionLinkLabel.TabStop = true;
-            this.versionLinkLabel.Text = "Version 0.5.0";
+            this.versionLinkLabel.Text = "Version 0.5.2";
             this.versionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.versionLinkLabel_LinkClicked);
             // 
             // connectButton
@@ -253,7 +269,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(299, 263);
+            this.tabControl1.Size = new System.Drawing.Size(299, 268);
             this.tabControl1.TabIndex = 52;
             // 
             // connectionTabPage
@@ -267,7 +283,7 @@
             this.connectionTabPage.Location = new System.Drawing.Point(4, 26);
             this.connectionTabPage.Name = "connectionTabPage";
             this.connectionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.connectionTabPage.Size = new System.Drawing.Size(291, 233);
+            this.connectionTabPage.Size = new System.Drawing.Size(291, 323);
             this.connectionTabPage.TabIndex = 0;
             this.connectionTabPage.Text = "Connection";
             this.connectionTabPage.UseVisualStyleBackColor = true;
@@ -306,7 +322,7 @@
             this.advancedTabPage.Controls.Add(this.label4);
             this.advancedTabPage.Location = new System.Drawing.Point(4, 26);
             this.advancedTabPage.Name = "advancedTabPage";
-            this.advancedTabPage.Size = new System.Drawing.Size(291, 233);
+            this.advancedTabPage.Size = new System.Drawing.Size(291, 323);
             this.advancedTabPage.TabIndex = 2;
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
@@ -377,7 +393,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(291, 233);
+            this.tabPage1.Size = new System.Drawing.Size(291, 323);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "About";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -472,12 +488,26 @@
             this.label5.TabIndex = 1;
             this.label5.Text = "PlutoSDR for SDR#";
             // 
+            // twitterLink
+            // 
+            this.twitterLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.twitterLink.AutoSize = true;
+            this.twitterLink.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.twitterLink.Location = new System.Drawing.Point(101, 291);
+            this.twitterLink.Name = "twitterLink";
+            this.twitterLink.Size = new System.Drawing.Size(102, 17);
+            this.twitterLink.TabIndex = 53;
+            this.twitterLink.TabStop = true;
+            this.twitterLink.Text = "by @Manawyrm";
+            this.twitterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.twitterLink_LinkClicked);
+            // 
             // PlutoSDRControllerDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.closeButton;
-            this.ClientSize = new System.Drawing.Size(323, 319);
+            this.ClientSize = new System.Drawing.Size(323, 324);
+            this.Controls.Add(this.twitterLink);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.versionLinkLabel);
             this.Controls.Add(this.labelVersion);
@@ -551,6 +581,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.LinkLabel linkLabel3;
         private System.Windows.Forms.Label label11;
+        public System.Windows.Forms.CheckBox customFilterCheckbox;
+        public System.Windows.Forms.LinkLabel twitterLink;
     }
 }
 

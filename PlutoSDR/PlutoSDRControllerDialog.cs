@@ -16,12 +16,14 @@ namespace SDRSharp.PlutoSDR
         public PlutoSDRControllerDialog(PlutoSDRIO owner)
         {
             InitializeComponent();
-        
+
             _owner = owner;
 
             InitSampleRates();
 
             agcEnabledCheckBox.Checked = (Utils.GetStringSetting("PlutoSDRGainControlMode", "manual") != "manual");
+            customFilterCheckbox.Checked = Utils.GetBooleanSetting("PlutoSDRCustomFilter", true);
+
             deviceUriTextbox.Text = Utils.GetStringSetting("PlutoSDRURI", "ip:192.168.2.1");
 
             samplerateComboBox.SelectedIndex = Utils.GetIntSetting("PlutoSDRSampleRate2", 1);
@@ -85,7 +87,7 @@ namespace SDRSharp.PlutoSDR
             }
             var samplerateString = samplerateComboBox.Items[samplerateComboBox.SelectedIndex].ToString().Split(' ')[0];
             var sampleRate = double.Parse(samplerateString, CultureInfo.InvariantCulture);
-            _owner.Device.SampleRate = (uint) (sampleRate * 1000000.0);
+            _owner.Device.SampleRate = (uint)(sampleRate * 1000000.0);
 
             Utils.SaveSetting("PlutoSDRSampleRate2", samplerateComboBox.SelectedIndex);
         }
@@ -100,7 +102,7 @@ namespace SDRSharp.PlutoSDR
         {
             samplerateComboBox_SelectedIndexChanged(null, null);
         }
-        
+
         private class ComboboxItem
         {
             public string Text { get; set; }
@@ -123,7 +125,7 @@ namespace SDRSharp.PlutoSDR
             get;
             set;
         }
-        
+
 
         private void rxVga1GainTrackBar_Scroll(object sender, EventArgs e)
         {
@@ -197,6 +199,20 @@ namespace SDRSharp.PlutoSDR
             }
         }
 
+
+        private void customFilterCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_owner.Device != null)
+            {
+                _owner.Device.enableCustomFilter = customFilterCheckbox.Checked;
+
+                // the SampleRate property checks the enableCustomFilter flag when set, 
+                // and will enable or disable the filter settings accordingly.
+                _owner.Device.SampleRate = _owner.Device.SampleRate;
+                Utils.SaveSetting("PlutoSDRCustomFilter", _owner.Device.enableCustomFilter);
+            }
+        }
+
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://tbspace.de");
@@ -215,6 +231,11 @@ namespace SDRSharp.PlutoSDR
         private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("mailto:t.maedel@alfeld.de");
+        }
+
+        private void twitterLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://twitter.com/manawyrm");
         }
     }
 }

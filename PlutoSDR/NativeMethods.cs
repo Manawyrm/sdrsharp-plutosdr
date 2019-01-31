@@ -13,6 +13,12 @@ namespace SDRSharp.PlutoSDR
         [DllImport("libad9361.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int ad9361_set_bb_rate(IntPtr dev, [In()] uint rate);
 
+        [DllImport("libad9361.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ad9361_set_bb_rate_custom_filter_auto(IntPtr dev, [In()] uint rate);
+
+        [DllImport("libad9361.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ad9361_set_trx_fir_enable(IntPtr dev, [In()] uint enable);
+
         /// <summary>
         /// Uses reflection to get the field value from an object.
         /// </summary>

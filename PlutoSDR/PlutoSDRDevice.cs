@@ -40,6 +40,7 @@ namespace SDRSharp.PlutoSDR
         private Thread _sampleThread = null;
         private PlutoSDRIO _plutoSDRIO;
         private PlutoSDRControllerDialog _gui;
+        public bool enableCustomFilter = Utils.GetBooleanSetting("PlutoSDRCustomFilter", true); 
 
         public uint Index
         {
@@ -82,18 +83,26 @@ namespace SDRSharp.PlutoSDR
                 _sampleRate = (long)value;
                 if (_dev != null)
                 {
+                    Bandwidth = (int)(value);
                     try
                     {
                         IntPtr dev = (IntPtr) NativeMethods.GetInstanceField(typeof(Device), _dev, "dev");
 
                         //FIXME: return value of set_bb_rate should be checked!
-                        int retVal = NativeMethods.ad9361_set_bb_rate(dev, (uint)value);
+                        if (enableCustomFilter)
+                        {
+                            int retVal = NativeMethods.ad9361_set_bb_rate_custom_filter_auto(dev, (uint)Bandwidth);
+                        }
+                        else
+                        {
+                            int retVal = NativeMethods.ad9361_set_bb_rate(dev, (uint)Bandwidth);
+                        }
+
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Couldn't set sample rate of " + value.ToString() + "!\n" + ex.Message, "Unsupported sample rate", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    Bandwidth = (int) (value * 1.25);
                     configureReadLength();
                 }
                 OnSampleRateChanged();
@@ -250,10 +259,10 @@ namespace SDRSharp.PlutoSDR
                     try
                     {
                         _buf.refill();
- 
+
                         samplesI = _rx0_i.read(_buf);
                         samplesQ = _rx0_q.read(_buf);
-
+                                         
                         var ptrIq = _iqPtr;
                         for (int i = 0; i < _readLength; i++)
                         {
