@@ -192,14 +192,14 @@ namespace SDRSharp.PlutoSDR
         {
             get
             {
-                return 70000000L;
+                return _PlutoSDRDevice.MinFrequency;
             }
         }
         long ITunableSource.MaximumTunableFrequency
         {
             get
             {
-                return 6000000000L;
+                return _PlutoSDRDevice.MaxFrequency;
             }
         }
 

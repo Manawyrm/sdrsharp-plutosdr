@@ -12,8 +12,8 @@ namespace SDRSharp.PlutoSDR
     {
         private const uint DefaultFrequency = 405500000U;
         private const int DefaultSamplerate = 1000000;
-        private const uint MinFrequency = 237500000;
-        private const uint MaxFrequency = 3800000000;
+        public long MinFrequency = 70000000L;
+        public long MaxFrequency = 6000000000L;
         private const int MinBandwidth = 1500000;
         private const int MaxBandwidth = 28000000;
         private const uint SampleTimeoutMs = 1000;
@@ -313,6 +313,20 @@ namespace SDRSharp.PlutoSDR
 
                 if (_dev == null)
                     throw new ApplicationException("Cannot open device ad9361-phy");
+
+                // check if the frequency range was extended
+                try
+                {
+                    // try to tune the LO to 100 MHz (outside of the AD9363 tuning range)
+                    IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", "100000000", false);
+                    IIOHelper.SetAttribute(_dev, "altvoltage0", "frequency", _centerFrequency.ToString(), false);
+                }
+                catch (Exception ex)
+                {
+                    MinFrequency = 325000000L;
+                    MaxFrequency = 3800000000L;
+                    _centerFrequency = MinFrequency;
+                }
 
                 Utils.SaveSetting("PlutoSDRURI", _gui.deviceUriTextbox.Text);
 

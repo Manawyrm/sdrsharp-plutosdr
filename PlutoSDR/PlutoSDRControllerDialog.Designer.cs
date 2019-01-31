@@ -243,7 +243,7 @@
             this.versionLinkLabel.Size = new System.Drawing.Size(82, 17);
             this.versionLinkLabel.TabIndex = 49;
             this.versionLinkLabel.TabStop = true;
-            this.versionLinkLabel.Text = "Version 0.5.2";
+            this.versionLinkLabel.Text = "Version 0.5.3";
             this.versionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.versionLinkLabel_LinkClicked);
             // 
             // connectButton
@@ -283,7 +283,7 @@
             this.connectionTabPage.Location = new System.Drawing.Point(4, 26);
             this.connectionTabPage.Name = "connectionTabPage";
             this.connectionTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.connectionTabPage.Size = new System.Drawing.Size(291, 323);
+            this.connectionTabPage.Size = new System.Drawing.Size(291, 238);
             this.connectionTabPage.TabIndex = 0;
             this.connectionTabPage.Text = "Connection";
             this.connectionTabPage.UseVisualStyleBackColor = true;
