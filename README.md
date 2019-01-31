@@ -23,6 +23,8 @@ Analog Devices ADALM-PlutoSDR driver for SDR#
 
 [Mod for 70-6000 MHz operation](https://wiki.analog.com/university/tools/pluto/users/customizing#updating_to_the_ad9364) currently required for this plugin! 
 
+If you're experiencing hang-ups related to EMI issues, read [this EEVBlog forum thread](http://www.eevblog.com/forum/rf-microwave/adalm-pluto-sdr/msg1616398/?PHPSESSID=ed6k84e445fqhpoe1nupgic3r3#msg1616398). There's a small mod which can help.  
+
 ## Thanks to 
 
 Jean-Michel Picod for the bladeRF driver, which was used as a base for this driver
