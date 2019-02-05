@@ -243,7 +243,7 @@
             this.versionLinkLabel.Size = new System.Drawing.Size(82, 17);
             this.versionLinkLabel.TabIndex = 49;
             this.versionLinkLabel.TabStop = true;
-            this.versionLinkLabel.Text = "Version 0.5.3";
+            this.versionLinkLabel.Text = "Version 0.5.4";
             this.versionLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.versionLinkLabel_LinkClicked);
             // 
             // connectButton
@@ -322,7 +322,7 @@
             this.advancedTabPage.Controls.Add(this.label4);
             this.advancedTabPage.Location = new System.Drawing.Point(4, 26);
             this.advancedTabPage.Name = "advancedTabPage";
-            this.advancedTabPage.Size = new System.Drawing.Size(291, 323);
+            this.advancedTabPage.Size = new System.Drawing.Size(291, 238);
             this.advancedTabPage.TabIndex = 2;
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
@@ -393,7 +393,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(291, 323);
+            this.tabPage1.Size = new System.Drawing.Size(291, 238);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "About";
             this.tabPage1.UseVisualStyleBackColor = true;
